@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Mars, Venus } from "lucide-react";
 
 interface QuestionCardProps {
   question: string;
@@ -42,15 +41,6 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
     }
   };
 
-  const renderGenderIcon = (imageType: string) => {
-    if (imageType === "gender-male") {
-      return <Mars className="w-16 h-16 text-black" />;
-    } else if (imageType === "gender-female") {
-      return <Venus className="w-16 h-16 text-black" />;
-    }
-    return null;
-  };
-
   return (
     <div className="w-full max-w-2xl mx-auto p-6 rounded-xl bg-white/80 backdrop-blur shadow-lg">
       <div className="mb-6 text-center">
@@ -75,9 +65,6 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
               className="h-auto py-4 opacity-60 hover:opacity-100 transition-all duration-300 hover:animate-button-pop"
               variant="secondary"
             >
-              {option.image ? (
-                renderGenderIcon(option.image)
-              ) : null}
               <span>{option.label}</span>
             </Button>
           ))}

@@ -148,11 +148,6 @@ const Index = () => {
 
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
-      // Reset the value in QuestionCard
-      const questionCard = document.querySelector('input[type="number"]') as HTMLInputElement;
-      if (questionCard) {
-        questionCard.value = '';
-      }
     } else {
       analyzeMathScore(newAnswers);
       setShowResults(true);
@@ -267,7 +262,7 @@ const Index = () => {
             totalQuestions={questions.length}
             onNext={handleAnswer}
             options={questions[currentQuestion].options}
-            type={questions[currentQuestion].type}
+            type={questions[currentQuestion].type as "buttons" | "number" | "text"}
             min={questions[currentQuestion].min}
             max={questions[currentQuestion].max}
           />
