@@ -19,7 +19,7 @@ export default {
     },
     extend: {
       colors: {
-        background: "#E8F5E8",
+        background: "#DFEDB6",
         primary: {
           DEFAULT: "#FFB5A7",
           hover: "#FFA597",

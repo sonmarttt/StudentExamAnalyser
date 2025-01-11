@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { QuestionCard } from "@/components/QuestionCard";
 import { Button } from "@/components/ui/button";
+import { Heart, Book, Battery, Activity, Clock, Brain } from "lucide-react";
 
 const questions = [
   {
@@ -134,7 +135,11 @@ const Index = () => {
   const [analysis, setAnalysis] = useState<{
     predictedScore: number;
     struggles: string[];
-    recommendations: string[];
+    recommendations: {
+      category: string;
+      items: string[];
+      icon: React.ReactNode;
+    }[];
   } | null>(null);
 
   const handleAnswer = (answer: string | number) => {
@@ -150,27 +155,84 @@ const Index = () => {
   };
 
   const analyzeMathScore = (answers: Record<string, string | number>) => {
-    // This is a simplified analysis. In a real application, you'd use proper ML models
     const readingScore = Number(answers.readingScore);
     const writingScore = Number(answers.writingScore);
     const studyTime = answers.studyTime;
     const testPrep = answers.testPrep;
+    const sports = answers.sports;
+    const lunchType = answers.lunchType;
 
     let predictedScore = (readingScore + writingScore) / 2;
     let struggles = [];
     let recommendations = [];
 
+    // Study Habits Category
     if (studyTime === "<5") {
       predictedScore *= 0.9;
       struggles.push("Limited study time");
-      recommendations.push("Increase study time to at least 5-10 hours per week");
+      recommendations.push({
+        category: "Study Habits",
+        icon: <Clock className="w-6 h-6 text-primary" />,
+        items: [
+          "Try to increase your study time gradually to 5-10 hours per week",
+          "Break your study sessions into smaller, manageable chunks",
+          "Use a study planner to organize your time effectively",
+        ],
+      });
     }
 
+    // Test Preparation
     if (testPrep === "no") {
       predictedScore *= 0.95;
       struggles.push("Lack of test preparation");
-      recommendations.push("Consider enrolling in a test preparation course");
+      recommendations.push({
+        category: "Test Preparation",
+        icon: <Book className="w-6 h-6 text-primary" />,
+        items: [
+          "Consider enrolling in a test preparation course",
+          "Practice with past exam papers to familiarize yourself with the format",
+          "Join a study group to share knowledge and stay motivated",
+        ],
+      });
     }
+
+    // Physical Well-being
+    if (sports === "never") {
+      struggles.push("Limited physical activity");
+      recommendations.push({
+        category: "Physical Well-being",
+        icon: <Activity className="w-6 h-6 text-primary" />,
+        items: [
+          "Try to incorporate light exercise into your daily routine",
+          "Take short walks between study sessions to refresh your mind",
+          "Remember that physical activity helps improve concentration and memory",
+        ],
+      });
+    }
+
+    // Energy and Nutrition
+    if (lunchType === "free") {
+      recommendations.push({
+        category: "Energy and Nutrition",
+        icon: <Battery className="w-6 h-6 text-primary" />,
+        items: [
+          "Make sure to eat regular, nutritious meals to maintain energy levels",
+          "Stay hydrated throughout the day",
+          "Consider healthy snacks during study sessions",
+        ],
+      });
+    }
+
+    // Mental Well-being
+    recommendations.push({
+      category: "Mental Well-being",
+      icon: <Heart className="w-6 h-6 text-primary" />,
+      items: [
+        "Take regular breaks to avoid burnout",
+        "Practice stress-management techniques",
+        "Remember that everyone learns differently - find what works best for you",
+      ],
+    });
 
     setAnalysis({
       predictedScore: Math.round(predictedScore),
@@ -200,7 +262,7 @@ const Index = () => {
             totalQuestions={questions.length}
             onNext={handleAnswer}
             options={questions[currentQuestion].options}
-            type={questions[currentQuestion].type}
+            type={questions[currentQuestion].type || "buttons"}
             min={questions[currentQuestion].min}
             max={questions[currentQuestion].max}
           />
@@ -208,7 +270,7 @@ const Index = () => {
           <div className="w-full max-w-2xl mx-auto p-6 rounded-xl bg-white/80 backdrop-blur shadow-lg">
             <h2 className="text-2xl font-semibold text-title mb-6">Analysis Results</h2>
             
-            <div className="mb-6">
+            <div className="mb-8">
               <h3 className="text-xl font-medium mb-2">Predicted Math Score</h3>
               <p className="text-3xl font-bold text-title">
                 {analysis?.predictedScore}%
@@ -216,28 +278,36 @@ const Index = () => {
             </div>
 
             {analysis?.struggles.length ? (
-              <div className="mb-6">
-                <h3 className="text-xl font-medium mb-2">Key Struggles</h3>
+              <div className="mb-8">
+                <h3 className="text-xl font-medium mb-2 flex items-center gap-2">
+                  <Brain className="w-6 h-6 text-primary" />
+                  Areas That Need Attention
+                </h3>
                 <ul className="list-disc list-inside">
                   {analysis.struggles.map((struggle, index) => (
-                    <li key={index} className="mb-1">{struggle}</li>
+                    <li key={index} className="mb-2 text-gray-700">{struggle}</li>
                   ))}
                 </ul>
               </div>
             ) : null}
 
-            {analysis?.recommendations.length ? (
-              <div className="mb-6">
-                <h3 className="text-xl font-medium mb-2">Study Recommendations</h3>
-                <ul className="list-disc list-inside">
-                  {analysis.recommendations.map((recommendation, index) => (
-                    <li key={index} className="mb-1">{recommendation}</li>
+            {analysis?.recommendations.map((category, index) => (
+              <div key={index} className="mb-8 p-4 bg-secondary/50 rounded-lg">
+                <h3 className="text-xl font-medium mb-3 flex items-center gap-2">
+                  {category.icon}
+                  {category.category}
+                </h3>
+                <ul className="space-y-2">
+                  {category.items.map((item, itemIndex) => (
+                    <li key={itemIndex} className="text-gray-700 ml-4">
+                      • {item}
+                    </li>
                   ))}
                 </ul>
               </div>
-            ) : null}
+            ))}
 
-            <Button onClick={restart} className="mt-8 opacity-60 hover:opacity-100">
+            <Button onClick={restart} className="mt-4 opacity-60 hover:opacity-100 w-full">
               Start New Analysis
             </Button>
           </div>
