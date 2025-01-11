@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Male, Female } from "lucide-react";
+import { Mars, Venus } from "lucide-react";
 
 interface QuestionCardProps {
   question: string;
@@ -44,9 +44,9 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
 
   const renderGenderIcon = (imageType: string) => {
     if (imageType === "gender-male") {
-      return <Male className="w-16 h-16 text-black" />;
+      return <Mars className="w-16 h-16 text-black" />;
     } else if (imageType === "gender-female") {
-      return <Female className="w-16 h-16 text-black" />;
+      return <Venus className="w-16 h-16 text-black" />;
     }
     return null;
   };
