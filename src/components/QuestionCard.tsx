@@ -43,7 +43,12 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
         <p className="text-sm text-gray-600 mb-2">
           Question {currentQuestion} out of {totalQuestions}
         </p>
-        <Progress value={(currentQuestion / totalQuestions) * 100} className="mb-4" />
+        <div className="h-2 bg-accent/30 rounded-full mb-4">
+          <div
+            className="h-full bg-primary rounded-full transition-all duration-300"
+            style={{ width: `${(currentQuestion / totalQuestions) * 100}%` }}
+          />
+        </div>
         <h2 className="text-2xl font-semibold text-text mb-8">{question}</h2>
       </div>
 

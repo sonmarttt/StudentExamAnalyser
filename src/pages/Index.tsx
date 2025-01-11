@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { QuestionCard } from "@/components/QuestionCard";
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/components/ui/use-toast";
 
 const questions = [
   {
@@ -132,7 +131,11 @@ const Index = () => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string | number>>({});
   const [showResults, setShowResults] = useState(false);
-  const { toast } = useToast();
+  const [analysis, setAnalysis] = useState<{
+    predictedScore: number;
+    struggles: string[];
+    recommendations: string[];
+  } | null>(null);
 
   const handleAnswer = (answer: string | number) => {
     const newAnswers = { ...answers, [questions[currentQuestion].id]: answer };
@@ -169,12 +172,10 @@ const Index = () => {
       recommendations.push("Consider enrolling in a test preparation course");
     }
 
-    toast({
-      title: "Analysis Complete",
-      description: `Predicted Math Score: ${Math.round(predictedScore)}
-        \nKey Struggles: ${struggles.join(", ")}
-        \nRecommendations: ${recommendations.join(", ")}`,
-      duration: 10000,
+    setAnalysis({
+      predictedScore: Math.round(predictedScore),
+      struggles,
+      recommendations,
     });
   };
 
@@ -182,12 +183,13 @@ const Index = () => {
     setCurrentQuestion(0);
     setAnswers({});
     setShowResults(false);
+    setAnalysis(null);
   };
 
   return (
     <div className="min-h-screen bg-background p-6">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-4xl font-bold text-center text-text mb-8">
+        <h1 className="text-4xl font-bold text-center text-title mb-8">
           Student Success Analyzer
         </h1>
         
@@ -203,8 +205,39 @@ const Index = () => {
             max={questions[currentQuestion].max}
           />
         ) : (
-          <div className="text-center">
-            <Button onClick={restart} className="mt-8">
+          <div className="w-full max-w-2xl mx-auto p-6 rounded-xl bg-white/80 backdrop-blur shadow-lg">
+            <h2 className="text-2xl font-semibold text-title mb-6">Analysis Results</h2>
+            
+            <div className="mb-6">
+              <h3 className="text-xl font-medium mb-2">Predicted Math Score</h3>
+              <p className="text-3xl font-bold text-title">
+                {analysis?.predictedScore}%
+              </p>
+            </div>
+
+            {analysis?.struggles.length ? (
+              <div className="mb-6">
+                <h3 className="text-xl font-medium mb-2">Key Struggles</h3>
+                <ul className="list-disc list-inside">
+                  {analysis.struggles.map((struggle, index) => (
+                    <li key={index} className="mb-1">{struggle}</li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
+
+            {analysis?.recommendations.length ? (
+              <div className="mb-6">
+                <h3 className="text-xl font-medium mb-2">Study Recommendations</h3>
+                <ul className="list-disc list-inside">
+                  {analysis.recommendations.map((recommendation, index) => (
+                    <li key={index} className="mb-1">{recommendation}</li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
+
+            <Button onClick={restart} className="mt-8 opacity-60 hover:opacity-100">
               Start New Analysis
             </Button>
           </div>

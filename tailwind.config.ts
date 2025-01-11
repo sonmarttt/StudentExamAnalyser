@@ -19,19 +19,20 @@ export default {
     },
     extend: {
       colors: {
-        background: "#F0F9F0",
+        background: "#E8F5E8",
         primary: {
-          DEFAULT: "#9ED5C5",
-          hover: "#8BC5B5",
-        },
-        secondary: {
           DEFAULT: "#FFB5A7",
           hover: "#FFA597",
         },
-        accent: {
-          DEFAULT: "#FCD5CE",
-          hover: "#FFBEB4",
+        secondary: {
+          DEFAULT: "#FFE5E0",
+          hover: "#FFD5CE",
         },
+        accent: {
+          DEFAULT: "#FEF7CD",
+          hover: "#FFF2B2",
+        },
+        title: "#0FA0CE",
         text: "#374151",
       },
       animation: {
