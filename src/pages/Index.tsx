@@ -9,8 +9,8 @@ const questions = [
     question: "What is your gender?",
     type: "buttons",
     options: [
-      { value: "male", label: "Male", image: "/male.png" },
-      { value: "female", label: "Female", image: "/female.png" },
+      { value: "male", label: "Male", image: "gender-male" },
+      { value: "female", label: "Female", image: "gender-female" },
     ],
   },
   {
@@ -148,6 +148,11 @@ const Index = () => {
 
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
+      // Reset the value in QuestionCard
+      const questionCard = document.querySelector('input[type="number"]') as HTMLInputElement;
+      if (questionCard) {
+        questionCard.value = '';
+      }
     } else {
       analyzeMathScore(newAnswers);
       setShowResults(true);
@@ -262,7 +267,7 @@ const Index = () => {
             totalQuestions={questions.length}
             onNext={handleAnswer}
             options={questions[currentQuestion].options}
-            type={questions[currentQuestion].type || "buttons"}
+            type={questions[currentQuestion].type}
             min={questions[currentQuestion].min}
             max={questions[currentQuestion].max}
           />

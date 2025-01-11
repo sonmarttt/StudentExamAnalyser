@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
+import { Icon } from "lucide-react";
+import { GenderFemale, GenderMale } from "lucide-react";
 
 interface QuestionCardProps {
   question: string;
@@ -23,7 +24,12 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
   min,
   max,
 }) => {
-  const [value, setValue] = React.useState<string | number>("");
+  const [value, setValue] = useState<string | number>("");
+
+  // Reset value when question changes
+  useEffect(() => {
+    setValue("");
+  }, [currentQuestion]);
 
   const handleNext = (selectedValue: string | number) => {
     setValue(selectedValue);
@@ -37,13 +43,22 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
     }
   };
 
+  const renderGenderIcon = (imageType: string) => {
+    if (imageType === "gender-male") {
+      return <GenderMale className="w-16 h-16 text-black" />;
+    } else if (imageType === "gender-female") {
+      return <GenderFemale className="w-16 h-16 text-black" />;
+    }
+    return null;
+  };
+
   return (
     <div className="w-full max-w-2xl mx-auto p-6 rounded-xl bg-white/80 backdrop-blur shadow-lg">
       <div className="mb-6 text-center">
         <p className="text-sm text-gray-600 mb-2">
           Question {currentQuestion} out of {totalQuestions}
         </p>
-        <div className="h-2 bg-accent/30 rounded-full mb-4">
+        <div className="h-2 bg-[#FFFFE0]/30 rounded-full mb-4">
           <div
             className="h-full bg-primary rounded-full transition-all duration-300"
             style={{ width: `${(currentQuestion / totalQuestions) * 100}%` }}
@@ -61,13 +76,9 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
               className="h-auto py-4 opacity-60 hover:opacity-100 transition-all duration-300 hover:animate-button-pop"
               variant="secondary"
             >
-              {option.image && (
-                <img
-                  src={option.image}
-                  alt={option.label}
-                  className="w-16 h-16 object-cover mb-2"
-                />
-              )}
+              {option.image ? (
+                renderGenderIcon(option.image)
+              ) : null}
               <span>{option.label}</span>
             </Button>
           ))}
