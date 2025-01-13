@@ -3,6 +3,7 @@
 ## Project info
 
 **URL**: https://lovable.dev/projects/1b654f43-8b1d-442d-81cd-893b5b61cfac
+
 https://lockedinn.lovable.app/
 
 ## How can I edit this code?
